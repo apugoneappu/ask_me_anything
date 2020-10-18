@@ -54,7 +54,7 @@ class VQA():
         
         else:
             raise NotImplementedError
-
+        
         net.load_state_dict(torch.load(f'./vqa/pickles/{model_name}.pkl', map_location='cpu')['state_dict'], strict=False)
         
         return net
@@ -72,8 +72,13 @@ class VQA():
 
         ret = self.net.forward(frcn_feat, frcn_feat_mask, ques_ix)
 
+        self.answer_confidence_plot(ret)
+
+    
+    def answer_confidence_plot(self, ret, k=7):
+
         soft_proj = torch.softmax(ret['proj_feat'], dim=-1)
-        values, indices = torch.topk(soft_proj, k=7)
+        values, indices = torch.topk(soft_proj, k)
 
         values, indices = values.squeeze(0), indices.squeeze(0)
 
@@ -85,6 +90,6 @@ class VQA():
             df['confidence'].append(100*values[idx].item())
 
         df = pd.DataFrame(df)
-        st.write(df)
 
+        # y axis should have categorical variable
         st.image(hbarplot(y='answers', x='confidence', data=df))
