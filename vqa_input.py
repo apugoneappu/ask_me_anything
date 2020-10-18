@@ -3,6 +3,11 @@ from PIL import Image
 from vqa.vqa import VQA
 import torchvision
 import torch
+from vqa.visualisations.vis import show_architecture
+from vqa.visualisations.vis import hbarplot
+import pandas as pd
+from slit.bb import BoundingBox
+import numpy as np
 
 st.title('Visualising attentions for Visual Question Answering (VQA) systems')
 
@@ -15,6 +20,8 @@ model_name = st.selectbox(
     index = 0,
     key = 'model_name'
 )
+
+show_architecture(model_name)
 
 question = st.text_input(
     label = 'Please type your question here',
@@ -34,8 +41,9 @@ if (model_name is not None):
     vqa_object = VQA(model_name)
 
 image = None
+# image_uploaded = open('/Users/apoorve/Downloads/dont_worry.jpg', 'rb')
 if (image_uploaded is not None):
-    image = Image.open(image_uploaded)
+    image = np.array(Image.open(image_uploaded))
 
     st.image(
         image, 
@@ -48,15 +56,30 @@ if (image_uploaded is not None):
     )
 
 # Call this only when question and image have loaded
-if (question and image):
+if (question and image is not None):
 
-    # frcnn = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True, progress=True, num_classes=91, pretrained_backbone=True)
-    # frcnn.backbone.fpn = None
+    # Get the dict from the net
+    ret = vqa_object.inference(question, image)
 
-    # frcnn.eval()
+    st.markdown('### Predicted confidence of top-7 answers')
+    vqa_object.answer_confidence_plot(ret)
 
-    # image_feat = torchvision.transforms.functional.to_tensor(image)
+    st.markdown('### Plotting top-attended bounding boxes')
 
-    vqa_object.inference(question, image)
+    bb_obj = BoundingBox(
+        image, 
+        bboxes=[
+            # [0.1, 0.3, 0.2, 0.6, 0.9],
+            # [0.2, 0.5, 0.7, 0.9, 0.7],
+            # [0.7, 0.85, 0.01, 0.15, 0.02],
+            # [0.5, 0.65, 0.8, 0.9, 0.09],
+            # [0.0, 0.2, 0.8, 1.0, 0.03],
+            # [0.0, 0.5, 0.0, 0.1, 0.33]
+        ]
+    )
+
+
+
+
 
 
