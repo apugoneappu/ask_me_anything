@@ -9,6 +9,7 @@ from vqa.visualisations.vis import hbarplot
 import streamlit as st
 import pandas as pd
 
+@st.cache
 class VQA():
 
     def __init__(self, long_model_name):
@@ -16,7 +17,7 @@ class VQA():
         Args:
             long_model_name (str): The string selected from the dropdown menu in streamlit
         """
-
+        
         # such as 'mfb', 'mcan' etc.
         self.model_name = self.get_model_name(long_model_name)
 
