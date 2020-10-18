@@ -28,31 +28,27 @@ image_uploaded = st.file_uploader(
     accept_multiple_files=False, 
     key='image_upload'
 )
+
+# Load the VQA model just after UI is loaded
+if (model_name is not None):
+    vqa_object = VQA(model_name)
+
 image = None
-
-st.markdown('## Chosen model')
-st.write(model_name)
-
 if (image_uploaded is not None):
     image = Image.open(image_uploaded)
 
-    st.markdown('## Input image')
     st.image(
         image, 
         caption='Uploaded image', 
         width=None, 
         use_column_width=True, 
         clamp=False, 
-        channels='RGB', 
+        channels='RGB',
         output_format='auto', 
     )
 
-st.markdown('## Input question')
-st.write(question)
-
 # Call this only when question and image have loaded
 if (question and image):
-    vqa_object = VQA(model_name)
 
     # frcnn = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True, progress=True, num_classes=91, pretrained_backbone=True)
     # frcnn.backbone.fpn = None
