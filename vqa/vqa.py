@@ -17,7 +17,7 @@ class VQA():
         Args:
             long_model_name (str): The string selected from the dropdown menu in streamlit
         """
-        
+
         # such as 'mfb', 'mcan' etc.
         self.model_name = self.get_model_name(long_model_name)
 
@@ -68,12 +68,12 @@ class VQA():
 
         # extract features from image
         ## Plugging in random value for now ##
-        frcn_feat = torch.randn(1, 100, 2048)
+        frcn_feat = torch.ones(1, 100, 2048)
         frcn_feat_mask = make_mask(frcn_feat)
 
         ret = self.net.forward(frcn_feat, frcn_feat_mask, ques_ix)
 
-        self.answer_confidence_plot(ret)
+        return ret
 
     
     def answer_confidence_plot(self, ret, k=7):
@@ -92,5 +92,5 @@ class VQA():
 
         df = pd.DataFrame(df)
 
-        # y axis should have categorical variable
+# y axis should have categorical variable
         st.image(hbarplot(y='answers', x='confidence', data=df))
