@@ -92,5 +92,5 @@ class VQA():
 
         df = pd.DataFrame(df)
 
-# y axis should have categorical variable
+        # y axis should have categorical variable
         st.image(hbarplot(y='answers', x='confidence', data=df))
