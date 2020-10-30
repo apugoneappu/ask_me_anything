@@ -1,5 +1,5 @@
 # Visual Question Answering Visualizer (VQA-VIZ)
-An easy-to-use app to visualise attentions of various VQA models. __Please click [here](https://share.streamlit.io/apugoneappu/vqa_visualise/vqa_input.py) to see a live demo of the app!__.   
+An easy-to-use app to visualise attentions of various VQA models. __Please click [here](https://share.streamlit.io/apugoneappu/vqa_visualise/vqa_input.py) to see a live demo of the app!__   
 
 ![top 7 predictions](assets/landing.jpg)
 
