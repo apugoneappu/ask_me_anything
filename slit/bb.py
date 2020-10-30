@@ -4,11 +4,11 @@ import cv2
 
 class BoundingBox():
 
-    def __init__(self, image, bboxes):
+    def __init__(self, image: np.ndarray, bboxes: list):
         
         # [] slider
         
-        self.image = image
+        self.image = np.copy(image)
         self.bboxes = bboxes
 
         self.show_all = st.checkbox(
