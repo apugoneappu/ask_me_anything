@@ -2,10 +2,10 @@
 An easy-to-use app to visualise attentions of various VQA models.
 
 ## Demo
-![landing page of vqa-viz](https://drive.google.com/uc?export=view&id=1WOoMT_Y4gE9ZojIZ4BxsWa636qE9mfvt)
-![landing page of vqa-viz](https://drive.google.com/uc?export=view&id=1SpBwiZS1EPihyJxXixdw8_XZyZkTQQs_)
-![landing page of vqa-viz](https://drive.google.com/uc?export=view&id=1_yUgnz8fG_vcw3FV-0E0G9dB1WsNKSxS)
-![landing page of vqa-viz](https://drive.google.com/uc?export=view&id=1IxI9Aga4ziLuuvSlUOKYnXcbItoUiIf2)
+![landing page of vqa-viz](assets/landing.jpg)
+![top 7 predictions](assets/predictions.jpg)
+![image attentions](assets/img_att.jpg)
+![text attentions](assets/text_att.jpg)
 
 
 • [Requirements](#requirements)  
