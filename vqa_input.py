@@ -7,6 +7,7 @@ from vqa.visualisations.vis import show_architecture
 from vqa.visualisations.vis import hbarplot
 import pandas as pd
 from slit.bb import BoundingBox
+from slit.attmaps import TextSelfAttMaps
 import numpy as np
 
 st.title('Visualising attentions for Visual Question Answering (VQA) systems')
@@ -64,12 +65,13 @@ if (question and image is not None):
     st.markdown('### Predicted confidence of top-7 answers')
     vqa_object.answer_confidence_plot(ret)
 
-    st.markdown('### Plotting top-attended bounding boxes')
+    st.markdown('### Top-attended bounding boxes')
 
     bb_obj = BoundingBox(
         image, 
         bboxes=[
             # [xmin, xmax, ymin, ymax, confidence]
+            # examples
             [0.1, 0.3, 0.2, 0.6, 0.9],
             [0.2, 0.5, 0.7, 0.9, 0.7],
             [0.7, 0.85, 0.01, 0.15, 0.02],
@@ -78,6 +80,18 @@ if (question and image is not None):
             [0.0, 0.5, 0.0, 0.1, 0.33]
         ]
     )
+
+    # Just for example
+    question_array = question.split(" ")
+    att = np.random.random((3, len(question_array)))
+    att[0] /= att[0,:].sum()
+    att[1] /= att[1,:].sum()
+    att[2] /= att[1,:].sum()
+
+    # question is the question string, and att is a nd.ndarray of shape (n_glimpses, num_words)
+    TextSelfAttMaps(question, attentions=att)
+
+
 
 
 
