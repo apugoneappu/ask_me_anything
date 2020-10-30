@@ -10,9 +10,11 @@ from slit.bb import BoundingBox
 from slit.attmaps import TextSelfAttMaps
 import numpy as np
 
-st.title('Visualising attentions for Visual Question Answering (VQA) systems')
+st.title('Visualizing attentions for Visual Question Answering (VQA)')
 
-model_name = st.selectbox(
+st.sidebar.title('Inputs')
+
+model_name = st.sidebar.selectbox(
     label = 'Please choose the model for which you want to see attentions',
     options = [
         'MFB: Multi-modal Factorized Bilinear Pooling with Co-Attention Learning',
@@ -22,15 +24,16 @@ model_name = st.selectbox(
     key = 'model_name'
 )
 
+st.markdown("### Model Architecture")
 show_architecture(model_name)
 
-question = st.text_input(
+question = st.sidebar.text_input(
     label = 'Please type your question here',
-    value= 'What is in the image?',  
+    value= '',  
     key= 'question'
 )
 
-image_uploaded = st.file_uploader(
+image_uploaded = st.sidebar.file_uploader(
     label = "Please upload the image here", 
     type=['png', 'jpg', 'jpeg'], 
     accept_multiple_files=False, 
@@ -46,7 +49,7 @@ image = None
 if (image_uploaded is not None):
     image = np.array(Image.open(image_uploaded).convert('RGB'))
 
-    st.image(
+    st.sidebar.image(
         image, 
         caption='Uploaded image', 
         width=None, 
@@ -83,18 +86,9 @@ if (question and image is not None):
 
     # Just for example
     question_array = question.split(" ")
-    att = np.random.random((3, len(question_array)))
+    att = np.random.random((2, len(question_array)))
     att[0] /= att[0,:].sum()
     att[1] /= att[1,:].sum()
-    att[2] /= att[1,:].sum()
 
     # question is the question string, and att is a nd.ndarray of shape (n_glimpses, num_words)
     TextSelfAttMaps(question, attentions=att)
-
-
-
-
-
-
-
-
