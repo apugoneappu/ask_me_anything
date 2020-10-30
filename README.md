@@ -11,9 +11,8 @@ An easy-to-use app to visualise attentions of various VQA models.
 • [Requirements](#requirements)  
 • [Installation](#installation)  
 • [Usage](#usage)  
-• Contributing  
-• Authors  
-• Acknowledgements  
+• [Contributing](#contributing)  
+• [Acknowledgements](#acknowledgements)  
 
 ## Requirements
 Please check the [requirements.txt](https://github.com/apugoneappu/vqa_visualise/blob/master/requirements.txt) file for the version numbers.
@@ -46,6 +45,10 @@ From the directory of this repository, do the following -
 3. In a browser tab, open the Network URL displayed in your terminal.
 
 Done! 🎉
+
+## Contributing
+
+First of all, thank you for wanting to contribute to this work! I will try and make your job as easy as possible.
 
 ## Acknowledgements 
 This repository has been built by modifying the [OpenVQA repository](https://github.com/MILVLG/openvqa/). 
