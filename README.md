@@ -47,3 +47,8 @@ From the directory of this repository, do the following -
 
 Done! 🎉
 
+## Acknowledgements 
+This repository has been built by modifying the [OpenVQA repository](https://github.com/MILVLG/openvqa/). 
+
+I would also like to thank [Yash Khandelwal](https://github.com/yash12khandelwal), [Nikhil Shah](https://github.com/itsshnik) and [Chinmay Singh](https://github.com/chinmay-singh) for their support and amazing suggestions!
+
