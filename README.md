@@ -1,4 +1,4 @@
-# Visual Question Answering Visualiser (VQA-VIZ)
+# Visual Question Answering Visualizer (VQA-VIZ)
 An easy-to-use app to visualise attentions of various VQA models.
 
 ![top 7 predictions](assets/landing.jpg)
