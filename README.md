@@ -1,16 +1,13 @@
 # Visual Question Answering Visualiser (VQA-VIZ)
 An easy-to-use app to visualise attentions of various VQA models.
 
-## Demo
-![landing page of vqa-viz](assets/landing.jpg)
-![top 7 predictions](assets/predictions.jpg)
-![image attentions](assets/img_att.jpg)
-![text attentions](assets/text_att.jpg)
+![top 7 predictions](assets/landing.jpg)
 
 • [Models](#models)  
 • [Requirements](#requirements)  
 • [Installation](#installation)  
-• [Usage](#usage)  
+• [How to run](#how-to-run)  
+• [How to use](#how-to-use)  
 • [Contributing](#contributing)  
 • [Acknowledgements](#acknowledgements)  
 
@@ -47,7 +44,7 @@ Please check the [requirements.txt](https://github.com/apugoneappu/vqa_visualise
 3. In a new environment (`new_env`)  
 ```pip install -r requirements.txt```  
 
-## Usage
+## How to run
 From the directory of this repository, do the following -
 
 1. ```conda activate new_env```
@@ -55,6 +52,12 @@ From the directory of this repository, do the following -
 3. In a browser tab, open the Network URL displayed in your terminal.
 
 Done! 🎉
+
+## How to use
+![input page](assets/input.jpg)
+![top 7 predictions](assets/predictions.jpg)
+![image attentions](assets/img_att.jpg)
+![text attentions](assets/text_att.jpg)
 
 ## Contributing
 
