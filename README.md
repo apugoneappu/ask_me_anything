@@ -1,5 +1,5 @@
 # Visual Question Answering Visualizer (VQA-VIZ)
-An easy-to-use app to visualise attentions of various VQA models.
+An easy-to-use app to visualise attentions of various VQA models. __Please click [here](https://share.streamlit.io/apugoneappu/vqa_visualise/vqa_input.py) to see a live demo of the app!__.   
 
 ![top 7 predictions](assets/landing.jpg)
 
@@ -67,4 +67,6 @@ First of all, thank you for wanting to contribute to this work! I will try and m
 This repository has been built by modifying the [OpenVQA repository](https://github.com/MILVLG/openvqa/). 
 
 I would also like to thank [Yash Khandelwal](https://github.com/yash12khandelwal), [Nikhil Shah](https://github.com/itsshnik) and [Chinmay Singh](https://github.com/chinmay-singh) for their support and amazing suggestions!
+
+Huge thanks to Streamlit for making all of this possible and for Streamlit Sharing that enables free hosting of this app! ❤️  
 
