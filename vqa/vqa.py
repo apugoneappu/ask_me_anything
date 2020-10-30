@@ -8,6 +8,8 @@ from vqa.utils.make_mask import make_mask
 from vqa.visualisations.vis import hbarplot
 import streamlit as st
 import pandas as pd
+import os
+import gdown
 
 @st.cache
 class VQA():
@@ -46,16 +48,25 @@ class VQA():
 
     def get_net(self, model_name):
 
+        url = 'https://drive.google.com/uc?id='
+        output = 'vqa/pickles/'
+
         if (model_name == 'mfb'):
 
             ################## #TODO hardcode token_size ###################
             net = Net_MFB(self.config, token_size=20573, answer_size=3129)
             net.eval()
             ###############################################################
-        
+
+            url += '1lHTuq_wfIMVxZDPvCuq3nFVmnF1ohkzb'
+            output += 'mfb.pkl'
+
         else:
             raise NotImplementedError
         
+        if (not os.path.isfile(f'./vqa/pickles/{model_name}.pkl')):
+            gdown.download(url, output, quiet=False)
+
         net.load_state_dict(torch.load(f'./vqa/pickles/{model_name}.pkl', map_location='cpu')['state_dict'], strict=False)
         
         return net
