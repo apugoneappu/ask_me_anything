@@ -50,7 +50,7 @@ class BoundingBox():
                     image_with_boxes[int(ymin*height):int(ymax*height),int(xmin*width):int(xmax*width),:] += self.colors[cat]
                     image_with_boxes[int(ymin*height):int(ymax*height),int(xmin*width):int(xmax*width),:] /= 2
                     cv2.putText(
-                        img=image_with_boxes, text=f'{confidence*100}%', org=(int(xmin*width),int(ymin*height)), color=self.colors[cat],
+                        img=image_with_boxes, text=f'{confidence*100}%', org=(int(xmin*width),int(ymin*height)), color=(0,0,0),
                         fontFace=0, fontScale=1.3, thickness=2
                     )
                 
