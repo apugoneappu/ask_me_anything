@@ -7,12 +7,22 @@ An easy-to-use app to visualise attentions of various VQA models.
 ![image attentions](assets/img_att.jpg)
 ![text attentions](assets/text_att.jpg)
 
-
+• [Models](#models)  
 • [Requirements](#requirements)  
 • [Installation](#installation)  
 • [Usage](#usage)  
 • [Contributing](#contributing)  
 • [Acknowledgements](#acknowledgements)  
+
+## Models
+
+• MFB - Multi-modal Factorized Bilinear Pooling with Co-Attention Learning for Visual Question Answering  
+_Zhou Yu, Jun Yu, Jianping Fan, Dacheng Tao_  
+[Arxiv](https://arxiv.org/abs/1708.01471)  
+
+• (Coming soon) MCAN - Deep Modular Co-Attention Networks for Visual Question Answering   
+_Zhou Yu, Jun Yu, Yuhao Cui, Dacheng Tao, Qi Tian_  
+[Arvix](https://arxiv.org/abs/1906.10770)  
 
 ## Requirements
 Please check the [requirements.txt](https://github.com/apugoneappu/vqa_visualise/blob/master/requirements.txt) file for the version numbers.
