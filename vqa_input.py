@@ -45,7 +45,9 @@ if (model_name is not None):
     vqa_object = VQA(model_name)
 
 image = None
-# image_uploaded = open('/Users/apoorve/Downloads/dont_worry.jpg', 'rb')
+if (image_uploaded is None):
+    image_uploaded = open('assets/test.jpg', 'rb')
+
 if (image_uploaded is not None):
     image = np.array(Image.open(image_uploaded).convert('RGB'))
 
@@ -84,11 +86,5 @@ if (question and image is not None):
         ]
     )
 
-    # Just for example
-    question_array = question.split(" ")
-    att = np.random.random((2, len(question_array)))
-    att[0] /= att[0,:].sum()
-    att[1] /= att[1,:].sum()
-
     # question is the question string, and att is a nd.ndarray of shape (n_glimpses, num_words)
-    TextSelfAttMaps(question, attentions=att)
+    TextSelfAttMaps(question, attentions=ret['text']['qatt'].squeeze().transpose(1,0).detach().numpy())
