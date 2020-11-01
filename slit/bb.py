@@ -16,7 +16,7 @@ class BoundingBox():
         )
         self.confidence_th = st.slider(
             label='Only objects with >= than this threshold will be shown', 
-            min_value=0.0, max_value=1.0, value=0.0, step=0.01
+            min_value=0.0, max_value=1.0, value=0.07, step=0.01
         )
 
         self.colors = {
@@ -51,7 +51,7 @@ class BoundingBox():
                     image_with_boxes[int(ymin*height):int(ymax*height),int(xmin*width):int(xmax*width),:] /= 2
                     cv2.putText(
                         img=image_with_boxes, text=f'{confidence*100:.2f}%', org=(int(xmin*width),int(ymin*height)), color=(0,0,0),
-                        fontFace=0, fontScale=1.3, thickness=2
+                        fontFace=0, fontScale=0.8, thickness=2
                     )
                 
 
