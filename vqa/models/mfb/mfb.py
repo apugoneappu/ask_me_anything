@@ -116,7 +116,6 @@ class IAtt(nn.Module):
         for i in range(self.config.I_GLIMPSES):
             mask = iatt_maps[:, :, i:i + 1]             # (N, C, 1)
             mask = mask * img_feat                      # (N, C, FRCN_FEAT_SIZE)
-            img_ret["iatt_feat"] = mask.clone()
             mask = torch.sum(mask, dim=1)               # (N, FRCN_FEAT_SIZE)
             iatt_feat_list.append(mask)
         iatt_feat = torch.cat(iatt_feat_list, dim=1)    # (N, FRCN_FEAT_SIZE*I_GLIMPSES)
