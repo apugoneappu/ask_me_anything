@@ -11,7 +11,11 @@ class TextSelfAttMaps():
     def __init__(self, text: str, attentions: np.ndarray):
 
         self.text = split_ques(text)
-        self.attentions = attentions
+
+        mask = np.zeros(14, dtype=np.bool)
+        mask[:len(self.text)] = 1
+
+        self.attentions = attentions[:,mask]
 
         st.markdown('### Text self-attention maps')
         self.cols = st.beta_columns(attentions.shape[0])
