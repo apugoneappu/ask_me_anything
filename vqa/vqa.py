@@ -72,6 +72,22 @@ class VQA():
         return net
     
     def inference(self, question, image):
+        """Function used for running inverence given the image and question
+
+        Args:
+            question (str): The question
+            image (np.ndarray): The image
+
+        Returns:
+            [dict]: {
+                "img": {
+                    "iatt_maps": torch.Tensor(1, 100, 2)
+                },
+                "text" {
+                    "qatt": torch.Tensor(1, 14, 2)
+                }
+            }
+        """
 
         # extract indices of question words
         ques_ix = proc_ques(question, self.token_to_ix, max_token=14)
