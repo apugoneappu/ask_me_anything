@@ -36,7 +36,7 @@ class BoundingBox():
 
         if self.show_all:
 
-            for (xmin, xmax, ymin, ymax, confidence) in self.bboxes:
+            for (xmin, ymin, xmax, ymax, confidence) in self.bboxes:
 
                 if (confidence >= self.confidence_th):
 
@@ -50,7 +50,7 @@ class BoundingBox():
                     image_with_boxes[int(ymin*height):int(ymax*height),int(xmin*width):int(xmax*width),:] += self.colors[cat]
                     image_with_boxes[int(ymin*height):int(ymax*height),int(xmin*width):int(xmax*width),:] /= 2
                     cv2.putText(
-                        img=image_with_boxes, text=f'{confidence*100}%', org=(int(xmin*width),int(ymin*height)), color=(0,0,0),
+                        img=image_with_boxes, text=f'{confidence*100:.2f}%', org=(int(xmin*width),int(ymin*height)), color=(0,0,0),
                         fontFace=0, fontScale=1.3, thickness=2
                     )
                 
