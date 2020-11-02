@@ -7,7 +7,14 @@ class BoundingBox():
     def __init__(self, image: np.ndarray, bboxes: list):
         
         # [] slider
-        
+        st.markdown('### Top-attended bounding boxes')
+        st.markdown(
+            'To answer the question, the system pays more attention to some regions of the image\
+            than others. The boxes here depict those regions.\n\n'
+            'The green boxes denote the regions with > 10% attention, blue boxes\
+            with attention score between 5% to 10% and the red boxes with less than 5%.'
+        )
+
         self.image = np.copy(image)
         self.bboxes = bboxes
 
