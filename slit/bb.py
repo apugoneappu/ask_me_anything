@@ -9,8 +9,9 @@ class BoundingBox():
         """[summary]
 
         Args:
-            image (np.ndarray): shape(height, width, channels)
-            bboxes (np.ndarray): shape(n_heads, num_objects, 5)
+            image (np.ndarray): shape(height, width, channels)  
+            bboxes (np.ndarray): shape(num_glimpses, num_boxes=20, 5)
+                            where the 5 numbers (xmin, ymin, xmax, ymax, confidence)
         """
         
         # [] slider
