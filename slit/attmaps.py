@@ -10,6 +10,15 @@ class TextSelfAttMaps():
 
     def __init__(self, text: str, attentions: np.ndarray):
 
+        st.markdown('### Text self-attention maps')
+        st.markdown(
+            'All words are not equally important to answer the question.\
+            The colours here depict the importance assigned to each word by the system.\n\n'
+            'However, we may end up with an incorrect answer if some key words are not attended to.\
+            To prevent this, we make two predictions about the significance of words.'
+        )
+        self.cols = st.beta_columns(attentions.shape[0])
+
         self.text = split_ques(text)
 
         mask = np.zeros(14, dtype=np.bool)
@@ -17,8 +26,6 @@ class TextSelfAttMaps():
 
         self.attentions = attentions[:,mask]
 
-        st.markdown('### Text self-attention maps')
-        self.cols = st.beta_columns(attentions.shape[0])
 
         self.plot_maps()
 
@@ -42,7 +49,7 @@ class TextSelfAttMaps():
                 im = heatmap(data, annot)
                 st.image(
                     im,
-                    caption=f'Glimpse #{idx}',
+                    caption=f'Prediction #{idx}',
                     use_column_width=False,
                 )
 
