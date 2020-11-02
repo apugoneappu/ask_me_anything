@@ -70,7 +70,6 @@ if (question and image is not None):
     st.markdown('### Predicted confidence of top-7 answers')
     vqa_object.answer_confidence_plot(ret)
 
-    st.markdown('### Top-attended bounding boxes')
 
     bb_obj = BoundingBox(
         image, 
