@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import cv2
+import torch
 
 class BoundingBox():
 
@@ -60,6 +61,33 @@ class BoundingBox():
         self.plot_boxes()
 
     
+    @staticmethod
+    def get_top_bboxes(iatt_maps, bboxes, k=20):
+        """Returns the padded bboxes sorted according to iatt_maps
+
+        Args:
+            iatt_maps ([type]): shape (num_glimpses, padded_num_objects)
+            bboxes ([type]): shape (num_objects, 4)
+
+        Returns:
+            np.ndarray: shape(num_glimpses, k, 5)
+        """
+
+        padded = torch.zeros(100, 5)
+        padded[:36,:4] = bboxes
+        
+        bbox_final = []
+        for i in range(iatt_maps.shape[0]):
+
+            padded[:,-1] = torch.tensor(iatt_maps[i])
+            _, indices = torch.topk(padded[:,-1], k)
+
+            # TODO - hardcoded image dimension 224
+            tmp = [ (padded[idx,:4]/224.0).tolist() + [padded[idx,-1].item()] for idx in indices.detach().numpy()[:k]]
+            bbox_final.append(tmp)
+        
+        return np.array(bbox_final)
+
     def plot_boxes(self):
 
         image_with_boxes = self.image.astype(np.float64)
