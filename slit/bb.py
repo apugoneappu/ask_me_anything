@@ -4,7 +4,13 @@ import cv2
 
 class BoundingBox():
 
-    def __init__(self, image: np.ndarray, bboxes: list):
+    def __init__(self, image: np.ndarray, bboxes: np.ndarray):
+        """[summary]
+
+        Args:
+            image (np.ndarray): shape(height, width, channels)
+            bboxes (np.ndarray): shape(n_heads, num_objects, 5)
+        """
         
         # [] slider
         st.markdown('### Top-attended bounding boxes')
