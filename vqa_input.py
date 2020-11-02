@@ -29,7 +29,7 @@ show_architecture(model_name)
 
 question = st.sidebar.text_input(
     label = 'Please type your question here',
-    value= '',  
+    value= 'What is there in the image?',  
     key= 'question'
 )
 
