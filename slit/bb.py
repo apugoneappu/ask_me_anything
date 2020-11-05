@@ -75,7 +75,7 @@ class BoundingBox():
         """
 
         padded = torch.zeros(100, 5)
-        padded[:36,:4] = bboxes
+        padded[:bboxes.shape[0],:4] = bboxes
         
         bbox_final = []
         for i in range(iatt_maps.shape[0]):
@@ -83,8 +83,7 @@ class BoundingBox():
             padded[:,-1] = torch.tensor(iatt_maps[i])
             _, indices = torch.topk(padded[:,-1], k)
 
-            # TODO - hardcoded image dimension 224
-            tmp = [ (padded[idx,:4]/224.0).tolist() + [padded[idx,-1].item()] for idx in indices.detach().numpy()[:k]]
+            tmp = [ (padded[idx,:4]).tolist() + [padded[idx,-1].item()] for idx in indices.detach().numpy()[:k]]
             bbox_final.append(tmp)
         
         return np.array(bbox_final)

@@ -71,12 +71,12 @@ class VQA():
         
         return net
     
-    def inference(self, question, image):
+    def inference(self, question, image_feat):
         """Function used for running inverence given the image and question
 
         Args:
             question (str): The question
-            image (np.ndarray): The image
+            image_feat (np.ndarray): The image of shape (num_objects, 2048)
 
         Returns:
             [dict]: {
@@ -95,7 +95,13 @@ class VQA():
 
         # extract features from image
         ## Plugging in random value for now ##
-        frcn_feat = torch.ones(1, 100, 2048)
+
+        initial = torch.zeros(100, 2048)
+        initial[:image_feat.shape[0]] = image_feat
+        frcn_feat = initial
+        frcn_feat = frcn_feat.unsqueeze(0)
+
+        # frcn_feat = torch.ones(1, 100, 2048)
         frcn_feat_mask = make_mask(frcn_feat)
 
         ret = self.net.forward(frcn_feat, frcn_feat_mask, ques_ix)
