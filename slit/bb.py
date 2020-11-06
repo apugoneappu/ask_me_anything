@@ -75,16 +75,15 @@ class BoundingBox():
         """
 
         padded = torch.zeros(100, 5)
-        padded[:36,:4] = bboxes
+        padded[:bboxes.shape[0],:4] = bboxes
         
         bbox_final = []
         for i in range(iatt_maps.shape[0]):
 
-            padded[:,-1] = torch.tensor(iatt_maps[i])
+            padded[:,-1] = iatt_maps[i]
             _, indices = torch.topk(padded[:,-1], k)
 
-            # TODO - hardcoded image dimension 224
-            tmp = [ (padded[idx,:4]/224.0).tolist() + [padded[idx,-1].item()] for idx in indices.detach().numpy()[:k]]
+            tmp = [ padded[idx].tolist() for idx in indices.detach().numpy()[:k]]
             bbox_final.append(tmp)
         
         return np.array(bbox_final)
@@ -111,10 +110,11 @@ class BoundingBox():
                     if (not self.is_shown[cat]):
                         continue
 
-                    image_with_boxes[int(ymin*height):int(ymax*height),int(xmin*width):int(xmax*width),:] += self.colors[cat]
-                    image_with_boxes[int(ymin*height):int(ymax*height),int(xmin*width):int(xmax*width),:] /= 2
+                    image_with_boxes[int(ymin):int(ymax),int(xmin):int(xmax),:] += self.colors[cat]
+                    image_with_boxes[int(ymin):int(ymax),int(xmin):int(xmax),:] /= 2
+                
                     cv2.putText(
-                        img=image_with_boxes, text=f'{confidence*100:.2f}%', org=(int(xmin*width),int(ymin*height)), color=(0,0,0),
+                        img=image_with_boxes, text=f'{confidence*100:.2f}%', org=(int(xmin),int(ymin)), color=(0,0,0),
                         fontFace=0, fontScale=0.8, thickness=2
                     )
                     
