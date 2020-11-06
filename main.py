@@ -10,7 +10,7 @@ from slit.attmaps import TextSelfAttMaps
 import numpy as np
 from sidebar import SideBar
 
-st.title('Visualizing attentions for Visual Question Answering (VQA)')
+st.title('AMA: Visualizing attentions for Visual Question Answering')
 
 sb = SideBar()
 
@@ -21,63 +21,32 @@ image_idx = sb.image_idx
 st.markdown("### Model Architecture")
 show_architecture(model_name)
 
-question = st.sidebar.text_input(
-    label = 'Please type your question here',
-    value= 'What is there in the image?',  
-    key= 'question'
-)
-
-image_uploaded = st.sidebar.file_uploader(
-    label = "Please upload the image here", 
-    type=['png', 'jpg', 'jpeg'], 
-    accept_multiple_files=False, 
-    key='image_upload'
-)
-
 # Load the VQA model just after UI is loaded
 if (model_name is not None):
     vqa_object = VQA(model_name)
 
 image = None
-if (image_uploaded is None):
-    image_uploaded = open('assets/test.jpg', 'rb')
+image_feat = None
+bboxes = None
+if (image_idx is not None):
+    image = np.array(Image.open(f'assets/images/{image_idx}.jpg').convert('RGB'))
+    feats = np.load(f'assets/feats/{image_idx}.npz')
 
-if (image_uploaded is not None):
-    image = np.array(Image.open(image_uploaded).convert('RGB'))
-
-    st.sidebar.image(
-        image, 
-        caption='Uploaded image', 
-        width=None, 
-        use_column_width=True, 
-        clamp=False, 
-        channels='RGB',
-        output_format='auto', 
-    )
+    image_feat = torch.tensor(feats['x'].T) #(num_objects, 2048)
+    bboxes = torch.tensor(feats['bbox']) #(num_objects, 4)
 
 # Call this only when question and image have loaded
-if (question and image is not None):
+if (question is not None and image is not None):
 
     # Get the dict from the net
-    ret = vqa_object.inference(question, image)
+    ret = vqa_object.inference(question, image_feat)
 
     st.markdown('### Predicted confidence of top-7 answers')
     vqa_object.answer_confidence_plot(ret)
 
+    bboxes = BoundingBox.get_top_bboxes(ret['img']['iatt_maps'].squeeze().transpose(1,0), bboxes)
 
-    bb_obj = BoundingBox(
-        image, 
-        bboxes=[
-            # [xmin, xmax, ymin, ymax, confidence]
-            # examples
-            [0.1, 0.3, 0.2, 0.6, 0.9],
-            [0.2, 0.5, 0.7, 0.9, 0.7],
-            [0.7, 0.85, 0.01, 0.15, 0.02],
-            [0.5, 0.65, 0.8, 0.9, 0.09],
-            [0.0, 0.2, 0.8, 1.0, 0.03],
-            [0.0, 0.5, 0.0, 0.1, 0.33]
-        ]
-    )
+    bb_obj = BoundingBox(image, bboxes=bboxes)
 
     # question is the question string, and att is a nd.ndarray of shape (n_glimpses, num_words)
     TextSelfAttMaps(question, attentions=ret['text']['qatt'].squeeze().transpose(1,0).detach().numpy())
