@@ -54,7 +54,7 @@ class VQA():
         if (not os.path.isfile(f'./vqa/pickles/{model_name}.pkl')):
             gdown.download(url, output, quiet=False)
 
-        net.load_state_dict(torch.load(f'./vqa/pickles/{model_name}.pkl', map_location='cpu')['state_dict'], strict=True)
+        net.load_state_dict(torch.load(f'./vqa/pickles/{model_name}.pkl', map_location='cpu')['state_dict'], strict=False)
         
         return net
     
