@@ -59,7 +59,7 @@ Done! 🎉
 
 ## Contributing
 
-First of all, thank you for wanting to contribute to this work! I will try and make your job as easy as possible.
+First of all, thank you for wanting to contribute to this work! I will try and make your job as easy as possible. Detailed instructions coming soon ...
 
 ## Acknowledgements 
 This repository has been built by modifying the [OpenVQA repository](https://github.com/MILVLG/openvqa/). 
