@@ -1,7 +1,7 @@
-# Visual Question Answering Visualizer (VQA-VIZ)
-An easy-to-use app to visualise attentions of various VQA models. __Please click [here](https://share.streamlit.io/apugoneappu/vqa_visualise/vqa_input.py) to see a live demo of the app!__   
+# Ask Me Anything: A tool for visualising Visual Question Answering (AMA)
+An easy-to-use app to visualise attentions of various VQA models. __Please click [here](https://share.streamlit.io/apugoneappu/ama/main.py) to see a live demo of the app!__   
 
-![top 7 predictions](assets/landing.jpg)
+![top 7 predictions](assets/landing.png)
 
 • [Models](#models)  
 • [Requirements](#requirements)  
@@ -24,18 +24,17 @@ _Zhou Yu, Jun Yu, Yuhao Cui, Dacheng Tao, Qi Tian_
 ## Requirements
 Please check the [requirements.txt](https://github.com/apugoneappu/vqa_visualise/blob/master/requirements.txt) file for the version numbers.
 
-1. torchvision
-2. seaborn
-3. pandas
-4. matplotlib
-5. dotmap
-6. streamlit
-7. numpy
-8. torch
-9. torchvision
-10. Pillow
-11. PyYAML
-12. opencv_python
+1. opencv_python==4.4.0.46
+2. numpy==1.19.4
+3. pandas==1.1.4
+4. torch==1.4.0
+5. matplotlib==3.3.2
+6. gdown==3.12.2
+7. seaborn==0.11.0
+8. dotmap==1.3.23
+9. streamlit==0.70.0
+10. Pillow==8.0.1
+11. PyYAML==5.3.1
 
 ## Installation
 1. Install Anaconda 
@@ -54,10 +53,9 @@ From the directory of this repository, do the following -
 Done! 🎉
 
 ## How to use
-![input page](assets/input.jpg)
-![top 7 predictions](assets/predictions.jpg)
-![image attentions](assets/img_att.jpg)
-![text attentions](assets/text_att.jpg)
+![input page](assets/landing.png)
+![image attentions](assets/img_att.png)
+![text attentions](assets/text_att.png)
 
 ## Contributing
 
