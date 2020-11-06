@@ -53,7 +53,7 @@ class SideBar():
         st.sidebar.markdown('## Step 3: Choose image')
 
         self.image_idx = st.sidebar.number_input(
-            label='Please choose the index for the image here (choose -1 to show images)', 
+            label='Please choose the index for the image here (choose -1 to show 6 random images)', 
             min_value=-1, max_value=self.num_images, value=0, step=1,
             format='%d'
         )
