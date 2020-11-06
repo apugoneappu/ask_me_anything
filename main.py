@@ -1,7 +1,6 @@
 import streamlit as st
 from PIL import Image
 from vqa.vqa import VQA
-import torchvision
 import torch
 from vqa.visualisations.vis import show_architecture
 from vqa.visualisations.vis import hbarplot
@@ -9,20 +8,15 @@ import pandas as pd
 from slit.bb import BoundingBox
 from slit.attmaps import TextSelfAttMaps
 import numpy as np
+from sidebar import SideBar
 
 st.title('Visualizing attentions for Visual Question Answering (VQA)')
 
-st.sidebar.title('Inputs')
+sb = SideBar()
 
-model_name = st.sidebar.selectbox(
-    label = 'Please choose the model for which you want to see attentions',
-    options = [
-        'MFB: Multi-modal Factorized Bilinear Pooling with Co-Attention Learning',
-        'MCAN: Deep Modular Co-Attention Networks'
-    ],
-    index = 0,
-    key = 'model_name'
-)
+model_name = sb.model_name
+question = sb.question
+image_idx = sb.image_idx
 
 st.markdown("### Model Architecture")
 show_architecture(model_name)
