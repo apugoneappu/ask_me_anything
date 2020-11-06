@@ -22,7 +22,7 @@ _Zhou Yu, Jun Yu, Yuhao Cui, Dacheng Tao, Qi Tian_
 [Arvix](https://arxiv.org/abs/1906.10770)  
 
 ## Requirements
-Please check the [requirements.txt](https://github.com/apugoneappu/vqa_visualise/blob/master/requirements.txt) file for the version numbers.
+Please check the [requirements.txt](https://github.com/apugoneappu/ask_me_anything/blob/master/requirements.txt) file for the version numbers.
 
 1. opencv_python==4.4.0.46
 2. numpy==1.19.4
@@ -39,7 +39,7 @@ Please check the [requirements.txt](https://github.com/apugoneappu/vqa_visualise
 ## Installation
 1. Install Anaconda 
 2. Clone this repository and cd into it.  
-```git clone https://github.com/apugoneappu/vqa_visualise.git && cd vqa_visualise```
+```git clone https://github.com/apugoneappu/ask_me_anything.git && cd ask_me_anything```
 3. In a new environment (`new_env`)  
 ```pip install -r requirements.txt```  
 
@@ -47,7 +47,7 @@ Please check the [requirements.txt](https://github.com/apugoneappu/vqa_visualise
 From the directory of this repository, do the following -
 
 1. ```conda activate new_env```
-2. ```streamlit run vqa_input.py```
+2. ```streamlit run main.py```
 3. In a browser tab, open the Network URL displayed in your terminal.
 
 Done! 🎉
