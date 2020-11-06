@@ -32,13 +32,8 @@ def heatmap(data, annot, **kwargs):
 
 def show_architecture(model_name):
 
-    if ('MFB' in model_name):
-        st.image('vqa/visualisations/mfb.png', 
-        caption='MFB architecture',
-        use_column_width=True
-    )
-    elif ('MCAN' in model_name):
-        st.image('vqa/visualisations/mcan.png', 
-        caption='MCAN architecture',
+    st.image(
+        f'vqa/visualisations/{model_name}.png', 
+        caption='Architecture overview',
         use_column_width=True
     )
