@@ -14,50 +14,23 @@ class BoundingBox():
                             where the 5 numbers (xmin, ymin, xmax, ymax, confidence)
         """
         
-        # [] slider
         st.markdown('### Top-attended bounding boxes')
         st.markdown(
             'To answer the question, the system pays more attention to some regions of the image\
-            than others. The boxes here depict those regions.\n\n'
-            'The green boxes denote the regions with > 10% attention, blue boxes\
-            with attention score between 5% to 10% and the red boxes with less than 5%.'
+            than others. The white boxes on the image depict those regions.  \n ')
+        st.markdown(
+            'However, we may end up with an incorrect answer if some critical regions are not attended to. Thus, the model makes two sets of predictions to avoid missing such important regions.'
         )
 
         self.cols = st.beta_columns(bboxes.shape[0])
-        self.button_cols = st.beta_columns(3)
 
         self.image = np.copy(image)
         self.bboxes = bboxes
 
-        with self.button_cols[0]:
-            self.show_green = st.checkbox(
-                label='Show green objects', value=True, key='show_green'
+        self.topk = st.number_input(
+            'Adjust the value below from 1 to 10 to see the top-10 objects in decreasing order of confidence.', 
+            min_value=1, max_value=10, value=1, step=1, format=None, key=None
         )
-        with self.button_cols[1]:
-            self.show_blue = st.checkbox(
-                label='Show blue objects', value=True, key='show_blue'
-        )
-        with self.button_cols[2]:
-            self.show_red = st.checkbox(
-                label='Show red objects', value=False, key='show_red'
-        )
-
-        self.confidence_th = st.slider(
-            label='Only objects with >= than this threshold will be shown', 
-            min_value=0.0, max_value=1.0, value=0.07, step=0.01
-        )
-
-        self.colors = {
-            "green": [0, 255, 0],
-            "blue": [0, 0, 170],
-            "red": [100, 0, 0]
-        }
-
-        self.is_shown = {
-            "green": self.show_green,
-            "blue": self.show_blue,
-            "red": self.show_red
-        }
 
         self.plot_boxes()
 
@@ -90,33 +63,37 @@ class BoundingBox():
 
     def plot_boxes(self):
 
-        image_with_boxes = self.image.astype(np.float64)
-        
-        height, width, channels = image_with_boxes.shape
-
         for idx in range(self.bboxes.shape[0]):
 
-            for (xmin, ymin, xmax, ymax, confidence) in self.bboxes[idx]:
+            image_with_boxes = self.image.astype(np.float64)
+            height, width, channels = image_with_boxes.shape
 
-                if (confidence >= self.confidence_th):
+            for obj_idx, (xmin, ymin, xmax, ymax, confidence) in enumerate(self.bboxes[idx]):
 
-                    if (confidence <= 0.05):
-                        cat = "red"
-                    elif (0.05 < confidence <= 0.1):
-                        cat = "blue"
-                    else:
-                        cat = "green"
-
-                    if (not self.is_shown[cat]):
-                        continue
-
-                    image_with_boxes[int(ymin):int(ymax),int(xmin):int(xmax),:] += self.colors[cat]
-                    image_with_boxes[int(ymin):int(ymax),int(xmin):int(xmax),:] /= 2
+                if (obj_idx+1 != self.topk):
+                    continue
                 
-                    cv2.putText(
-                        img=image_with_boxes, text=f'{confidence*100:.2f}%', org=(int(xmin),int(ymin)), color=(0,0,0),
-                        fontFace=0, fontScale=0.8, thickness=2
-                    )
+                # Mask is true everywhere else except the object
+                mask = np.ones_like(image_with_boxes)
+
+                # Mask is false on the object
+                mask[int(ymin):int(ymax),int(xmin):int(xmax),:] = 0
+
+                mask = mask.astype(np.bool)
+
+                # Darken the non-object regions
+                image_with_boxes[mask] /= 3
+
+                self.plot_box(image_with_boxes, xmin, ymin, xmax, ymax, height, width)
+
+                # Write the accuracy on the top-left corner
+                # cv2.putText(
+                #     img=image_with_boxes, text=f'{confidence*100:.2f}%', org=(10,30), color=(255,255,255),
+                #     fontFace=0, fontScale=1, thickness=2
+                # )
+
+                with self.cols[idx]:
+                    st.write(f'Confidence: {100 * confidence:.4f}')
                     
             with self.cols[idx]:
                 st.image(
@@ -124,6 +101,42 @@ class BoundingBox():
                     caption=f'Prediction #{idx}'
                 )
             
+    def plot_box(self, img, xmin, ymin, xmax, ymax, height, width, line_width=3):
+        
+        def boundary(x, limit):
+
+            if (x < 0):
+                return 0
+            
+            if (x >= limit):
+                return limit-1
+            
+            return x
+
+        img[
+            boundary(int(ymin)-line_width, height):boundary(int(ymin), height),
+            boundary(int(xmin)-line_width, width):boundary(int(xmax)+line_width, width),
+            :
+        ] = 255
+
+        img[
+            boundary(int(ymax), height):boundary(int(ymax)+line_width, height),
+            boundary(int(xmin)-line_width, width):boundary(int(xmax)+line_width, width),
+            :
+        ] = 255
+
+        img[
+            boundary(int(ymin)-line_width, height):boundary(int(ymax)+line_width, height),
+            boundary(int(xmin)-line_width, width):boundary(int(xmin), width),
+            :
+        ] = 255
+
+        img[
+            boundary(int(ymin)-line_width, height):boundary(int(ymax)+line_width, height),
+            boundary(int(xmax), width):boundary(int(xmax)+line_width, width),
+            :
+        ] = 255
+
         
 
 
