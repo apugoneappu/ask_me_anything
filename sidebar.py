@@ -18,6 +18,8 @@ class SideBar():
         self._image()
 
         self._show_images()
+
+        self._show_author()
     
     def _title(self):
         st.sidebar.title(self.title)
@@ -86,3 +88,33 @@ class SideBar():
         
         else:
             raise NotImplementedError
+
+    def _show_author(self):
+
+        st.sidebar.markdown(
+            '## Future releases'
+        )
+
+        st.sidebar.info(
+            "Version 2 of this is already underway with -  \n • custom image uploads  \n • many more models!  \n "
+            "To stay tuned for future releases, follow me on Twitter.  \n"
+            "Please consider starring this repo if you like it!"
+        )
+
+        cols = st.sidebar.beta_columns((3,4))
+
+        with cols[0]:
+            st.components.v1.iframe(src="https://ghbtns.com/github-btn.html?user=apugoneappu&repo=ask_me_anything&type=star&count=true&size=large",
+            height=30)
+
+        with cols[1]:
+            st.components.v1.iframe(src="https://platform.twitter.com/widgets/follow_button.html?screen_name=apoorve_singhal&show_screen_name=true&show_count=false&size=l",
+            height=30)
+        
+        st.sidebar.markdown(
+            '## About me'
+        )
+        st.sidebar.info(
+            "Hi, I'm Apoorve. I like to explain the working of my networks with simple visualisations.  \n "
+            "Please visit [apoorvesinghal.com](https://www.apoorvesinghal.com) if you wish to know more about me."
+        )
