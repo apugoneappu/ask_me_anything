@@ -2,6 +2,7 @@ import pickle
 import yaml
 from dotmap import DotMap
 from vqa.models.mfb.net import Net as Net_MFB
+from vqa.models.mcan.net import Net as Net_MCAN
 from vqa.utils.preprocess import proc_ques
 import torch
 from vqa.utils.make_mask import make_mask
@@ -27,6 +28,9 @@ class VQA():
             self.config = yaml.load(f, Loader=yaml.FullLoader)
             self.config = DotMap(self.config)
 
+        self.token_size = 20573
+        self.answer_size = 3129
+
         self.net = self.get_net(self.model_name)
 
         with open('vqa/pickles/dataset.pkl', 'rb') as f:
@@ -35,6 +39,7 @@ class VQA():
         self.token_to_ix = dataset['token_to_ix']
         self.ix_to_answer = dataset['ix_to_ans']
 
+
     def get_net(self, model_name):
 
         url = 'https://drive.google.com/uc?id='
@@ -42,15 +47,22 @@ class VQA():
 
         if (model_name == 'mfb'):
 
-            net = Net_MFB(self.config, token_size=20573, answer_size=3129)
-            net.eval()
+            net = Net_MFB(self.config, token_size=self.token_size, answer_size=self.answer_size)
 
             url += '1lHTuq_wfIMVxZDPvCuq3nFVmnF1ohkzb'
             output += 'mfb.pkl'
+        
+        # elif (model_name == 'mcan'):
+
+        #     net = Net_MCAN(self.config, token_size=self.token_size, answer_size=self.answer_size)
+            
+        #     url += '1nZGePRdZ-tYJlK2GT-V9nA83YhlGDb7w'
+        #     output += 'mcan.pkl'
 
         else:
             raise NotImplementedError
         
+        net.eval()
         if (not os.path.isfile(f'./vqa/pickles/{model_name}.pkl')):
             gdown.download(url, output, quiet=False)
 
