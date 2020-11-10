@@ -45,7 +45,7 @@ class SideBar():
 
         self.question = st.sidebar.text_input(
             label = 'Please type your question here',
-            value= 'What is the colour of the sprayer?',  
+            value= 'What is the colour of the hat?',  
             key= 'question'
         )
 
@@ -56,7 +56,7 @@ class SideBar():
 
         self.image_idx = st.sidebar.number_input(
             label='Please choose the index for the image here (choose -1 to show 6 random images). The model has not been trained on these images.', 
-            min_value=-1, max_value=self.num_images, value=0, step=1,
+            min_value=-1, max_value=self.num_images, value=1, step=1,
             format='%d'
         )
 
