@@ -49,7 +49,7 @@ class VQA():
 
             net = Net_MFB(self.config, token_size=self.token_size, answer_size=self.answer_size)
 
-            url += '1lHTuq_wfIMVxZDPvCuq3nFVmnF1ohkzb'
+            url += '1YOy1uPGOt7204jSMrzMCwu3tBJUxUTan'
             output += 'mfb.pkl'
         
         # elif (model_name == 'mcan'):
