@@ -1,11 +1,12 @@
 import streamlit as st
 import random
+from utils.count_files import num_images
 
 class SideBar():
 
-    def __init__(self, num_images=32) -> None:
+    def __init__(self) -> None:
 
-        self.num_images = num_images
+        self.num_images = num_images()
 
         self.title = "Ask me anything (AMA)"
         self.model_name = None
