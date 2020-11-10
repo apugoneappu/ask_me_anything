@@ -17,7 +17,22 @@ class BoundingBox():
         st.markdown('### Top-attended bounding boxes')
         st.markdown(
             'To answer the question, the system pays more attention to some regions of the image\
-            than others. The white boxes on the image depict those regions.  \n ')
+            than others. The boxes on the image are colour-coded with the confidence of the system.')
+
+        self.color_cols = st.beta_columns(4)
+
+        with self.color_cols[0]:
+            self.first = (st.color_picker('conf > 50%', '#48b5a3'))
+        
+        with self.color_cols[1]:
+            self.second = (st.color_picker('25% < conf < 50%', '#6fb7d6'))
+
+        with self.color_cols[2]:
+            self.third = (st.color_picker('10% < conf < 25%', '#fca985'))
+
+        with self.color_cols[3]:
+            self.fourth = (st.color_picker('conf < 10%', '#f0e8cd'))
+        
         st.markdown(
             'However, we may end up with an incorrect answer if some critical regions are not attended to. Thus, the model makes two sets of predictions to avoid missing such important regions.'
         )
@@ -27,14 +42,18 @@ class BoundingBox():
         self.image = np.copy(image)
         self.bboxes = bboxes
 
-        self.topk = st.number_input(
-            'Adjust the value below from 1 to 10 to see the top-10 objects in decreasing order of confidence.', 
-            min_value=1, max_value=10, value=1, step=1, format=None, key=None
+        self.topk = st.slider(
+            'Drag the slider to change the number of objects (displayed in decreasing order of confidence)', 
+            min_value=1, max_value=10, value=3, step=1, format=None, key=None
         )
 
         self.plot_boxes()
 
-    
+    def hex_to_rgb(self, hex):
+
+        h = hex.lstrip('#')
+        return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+
     @staticmethod
     def get_top_bboxes(iatt_maps, bboxes, k=20):
         """Returns the padded bboxes sorted according to iatt_maps
@@ -65,36 +84,41 @@ class BoundingBox():
 
         for idx in range(self.bboxes.shape[0]):
 
-            image_with_boxes = self.image.astype(np.float64)
+            image_with_boxes = np.copy(self.image.astype(np.float64))
             height, width, channels = image_with_boxes.shape
+            total_mask = np.ones_like(image_with_boxes)
 
-            for obj_idx, (xmin, ymin, xmax, ymax, confidence) in enumerate(self.bboxes[idx]):
+            for obj_idx, (xmin, ymin, xmax, ymax, confidence) in enumerate(self.bboxes[idx][:self.topk]):
 
-                if (obj_idx+1 != self.topk):
-                    continue
-                
                 # Mask is true everywhere else except the object
-                mask = np.ones_like(image_with_boxes)
 
                 # Mask is false on the object
-                mask[int(ymin):int(ymax),int(xmin):int(xmax),:] = 0
+                total_mask[int(ymin):int(ymax),int(xmin):int(xmax),:] = 0
 
-                mask = mask.astype(np.bool)
+            total_mask = total_mask.astype(np.bool)
+            image_with_boxes[total_mask] /= 2
 
-                # Darken the non-object regions
-                image_with_boxes[mask] /= 3
+            for obj_idx, (xmin, ymin, xmax, ymax, confidence) in enumerate(reversed(self.bboxes[idx][:self.topk])):
 
+                if (confidence < 0.1):
+                    col = self.hex_to_rgb(self.fourth)
+                elif (confidence < 0.25):
+                    col = self.hex_to_rgb(self.third)
+                elif (confidence < 0.5):
+                    col = self.hex_to_rgb(self.second)
+                else:
+                    col = self.hex_to_rgb(self.first)
+
+                # Restore greyed out original
+                image_with_boxes[int(ymin):int(ymax),int(xmin):int(xmax),:] = self.image[int(ymin):int(ymax),int(xmin):int(xmax),:]/3
+                image_with_boxes[int(ymin):int(ymax),int(xmin):int(xmax)] += 2*np.array(col)/3
                 self.plot_box(image_with_boxes, xmin, ymin, xmax, ymax, height, width)
 
-                # Write the accuracy on the top-left corner
                 # cv2.putText(
-                #     img=image_with_boxes, text=f'{confidence*100:.2f}%', org=(10,30), color=(255,255,255),
-                #     fontFace=0, fontScale=1, thickness=2
+                #     img=image_with_boxes, text=f'{confidence*100:.2f}%', org=(int(xmin),int(ymin)+20), color=(255,255,255),
+                #     fontFace=0, fontScale=0.8, thickness=2
                 # )
 
-                with self.cols[idx]:
-                    st.write(f'Confidence: {100 * confidence:.4f}')
-                    
             with self.cols[idx]:
                 st.image(
                     image_with_boxes.astype(np.uint8), use_column_width=True,
