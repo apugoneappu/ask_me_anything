@@ -1,3 +1,4 @@
+PyYAML==5.3.1
 opencv_python==4.4.0.46
 numpy==1.19.4
 pandas==1.1.4
@@ -8,4 +9,3 @@ seaborn==0.11.0
 dotmap==1.3.23
 streamlit==0.70.0
 Pillow==8.0.1
-PyYAML==5.3.1
