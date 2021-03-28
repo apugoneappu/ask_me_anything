@@ -1,5 +1,5 @@
 # Ask Me Anything: A tool for visualising Visual Question Answering (AMA) [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/apugoneappu/ask_me_anything/main.py)
-An easy-to-use app to visualise attentions of various VQA models. __Please click [here](https://share.streamlit.io/apugoneappu/ama/main.py) to see a live demo of the app!__   
+An easy-to-use app to visualise attentions of various VQA models. __Please click [here](https://share.streamlit.io/apugoneappu/ask_me_anything/main.py) to see a live demo of the app!__   
 
 ![top 7 predictions](assets/landing.png)
 
