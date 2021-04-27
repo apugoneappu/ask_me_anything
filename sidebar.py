@@ -12,6 +12,9 @@ class SideBar():
         self.model_name = None
         self.question = None
         self.image_idx = None
+        self.item_num = 1
+        self.img_att: str = "normal"
+        self.text_att: str = "normal"
 
         self._title()
         self._model()
@@ -20,14 +23,17 @@ class SideBar():
 
         self._show_images()
 
+        self._get_attention_type()
+
         self._show_author()
+
     
     def _title(self):
         st.sidebar.title(self.title)
 
     def _model(self):
 
-        st.sidebar.markdown('## Step 1: Choose model')
+        st.sidebar.markdown(f'## Step {self.item_num}: Choose model')
 
         self.model_name = st.sidebar.selectbox(
             label = 'Please choose the model here',
@@ -40,9 +46,10 @@ class SideBar():
         )
 
         self._fix_model_name(self.model_name)
+        self.item_num += 1
     
     def _question(self):
-        st.sidebar.markdown('## Step 2: Enter question')
+        st.sidebar.markdown(f'## Step {self.item_num}: Enter question')
 
         self.question = st.sidebar.text_input(
             label = 'Please type your question here',
@@ -50,10 +57,12 @@ class SideBar():
             key= 'question'
         )
 
+        self.item_num += 1
+
     
     def _image(self):
 
-        st.sidebar.markdown('## Step 3: Choose image')
+        st.sidebar.markdown(f'## Step {self.item_num}: Choose image')
 
         self.image_idx = st.sidebar.number_input(
             label='Please choose the index for the image here (choose -1 to show 6 random images). The model has not been trained on these images.', 
@@ -63,6 +72,8 @@ class SideBar():
 
         if (self.image_idx == -1):
             self.image_idx = None
+        
+        self.item_num += 1
     
     def _show_images(self):
 
@@ -119,3 +130,29 @@ class SideBar():
             "Hi, I'm Apoorve. I like to explain the working of my networks with simple visualisations.  \n "
             "Please visit [apoorvesinghal.com](https://www.apoorvesinghal.com) if you wish to know more about me."
         )
+    
+    def _get_attention_type(self):
+
+        st.sidebar.markdown(f'## Step {self.item_num}: Choose image attention')
+
+        img_att: str = st.sidebar.radio(label="", 
+            options=["Normal", "Equal", "Gaussian", "Uniform"], 
+            index=0,
+            key="img_att"
+        )
+
+        self.img_att = img_att.lower()
+        self.item_num += 1
+
+        st.sidebar.markdown(f'## Step {self.item_num}: Choose text attention')
+
+        text_att: str = st.sidebar.radio(label="", 
+            options=["Normal", "Equal", "Gaussian", "Uniform"], 
+            index=0,
+            key="text_att"
+        )
+
+        self.text_att = text_att.lower()
+        self.item_num += 1
+
+
