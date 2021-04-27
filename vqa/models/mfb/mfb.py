@@ -14,6 +14,33 @@ import torch.nn.functional as F
 # ---- Multi-Model Hign-order Bilinear Pooling Co-Attention----
 # -------------------------------------------------------------
 
+def change_attention(att: torch.Tensor, att_type: str) -> torch.Tensor:
+    """[summary]
+
+    Args:
+        att : (batch_size, num_entities, num_glimpses)
+        att_type : one of {"normal", "equal", "gaussian", "uniform"}
+
+    Raises:
+        NotImplementedError: if att_type is not of specified values
+
+    Returns:
+        torch.Tensor: att after filling with values according to att_type
+    """
+
+    if att_type == "normal":
+        pass
+    elif att_type == "equal":
+        att = torch.ones_like(att)
+    elif att_type == "gaussian":
+        att = torch.randn_like(att)
+    elif att_type == "uniform":
+        att = torch.rand_like(att)
+    else:
+        raise NotImplementedError
+
+    return att
+
 
 class MFB(nn.Module):
     def __init__(self, config, img_feat_size, ques_feat_size, is_first):
@@ -56,12 +83,13 @@ class QAtt(nn.Module):
             use_relu=True
         )
 
-    def forward(self, ques_feat, ques_feat_mask, text_ret):
+    def forward(self, ques_feat, ques_feat_mask, text_ret, text_att):
         '''
             ques_feat.size() -> (N, T, LSTM_OUT_SIZE)
             qatt_feat.size() -> (N, LSTM_OUT_SIZE * Q_GLIMPSES)
         '''
         qatt_maps = self.mlp(ques_feat)                 # (N, T, Q_GLIMPSES)
+        qatt_maps = change_attention(qatt_maps, text_att)
         if ques_feat_mask is not None:
             qatt_maps = qatt_maps.masked_fill(ques_feat_mask, -1e9)
 
@@ -80,6 +108,7 @@ class QAtt(nn.Module):
         return qatt_feat
 
 
+
 class IAtt(nn.Module):
     def __init__(self, config, img_feat_size, ques_att_feat_size):
         super(IAtt, self).__init__()
@@ -94,7 +123,7 @@ class IAtt(nn.Module):
             use_relu=True
         )
 
-    def forward(self, img_feat, ques_att_feat, img_feat_mask, img_ret):
+    def forward(self, img_feat, ques_att_feat, img_feat_mask, img_ret, img_att):
         '''
             img_feats.size() -> (N, C, FRCN_FEAT_SIZE)
             ques_att_feat.size() -> (N, LSTM_OUT_SIZE * Q_GLIMPSES)
@@ -105,6 +134,7 @@ class IAtt(nn.Module):
         z, _ = self.mfb(img_feat, ques_att_feat)        # (N, C, O)
 
         iatt_maps = self.mlp(z)                         # (N, C, I_GLIMPSES)
+        iatt_maps = change_attention(iatt_maps, img_att)
         if img_feat_mask is not None:
             iatt_maps = iatt_maps.masked_fill(img_feat_mask, -1e9)
 
@@ -140,14 +170,14 @@ class CoAtt(nn.Module):
         else:  # MFB
             self.mfb = MFB(config, img_att_feat_size, ques_att_feat_size, True)
 
-    def forward(self, img_feat, ques_feat, img_feat_mask, ques_feat_mask, text_ret, img_ret, **kwargs):
+    def forward(self, img_feat, ques_feat, img_feat_mask, ques_feat_mask, text_ret, img_ret, img_att, text_att, **kwargs):
         '''
             img_feat.size() -> (N, C, FRCN_FEAT_SIZE)
             ques_feat.size() -> (N, T, LSTM_OUT_SIZE)
             z.size() -> MFH:(N, 2*O) / MFB:(N, O)
         '''
-        ques_feat = self.q_att(ques_feat, ques_feat_mask, text_ret)               # (N, LSTM_OUT_SIZE*Q_GLIMPSES)
-        fuse_feat = self.i_att(img_feat, ques_feat, img_feat_mask, img_ret)     # (N, FRCN_FEAT_SIZE*I_GLIMPSES)
+        ques_feat = self.q_att(ques_feat, ques_feat_mask, text_ret, text_att)               # (N, LSTM_OUT_SIZE*Q_GLIMPSES)
+        fuse_feat = self.i_att(img_feat, ques_feat, img_feat_mask, img_ret, img_att)     # (N, FRCN_FEAT_SIZE*I_GLIMPSES)
 
         if self.config.HIGH_ORDER:  # MFH
             z1, exp1 = self.mfh1(fuse_feat.unsqueeze(1), ques_feat.unsqueeze(1))        # z1:(N, 1, O)  exp1:(N, C, K*O)

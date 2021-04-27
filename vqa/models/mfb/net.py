@@ -41,7 +41,7 @@ class Net(nn.Module):
         else:                   # MFB
             self.proj = nn.Linear(config.MFB_O, answer_size)
 
-    def forward(self, img_feat, img_feat_mask, ques_ix, **kwargs):
+    def forward(self, img_feat, img_feat_mask, ques_ix, img_att, text_att, **kwargs):
 
         # Pre-process Language Feature
         ques_feat_mask = make_mask(ques_ix.unsqueeze(2)).squeeze(2).permute(0, 2, 1)
@@ -59,7 +59,9 @@ class Net(nn.Module):
             img_feat_mask.squeeze(2).permute(0, 2, 1),
             ques_feat_mask,
             text_ret=text_ret,
-            img_ret=img_ret
+            img_ret=img_ret,
+            img_att=img_att,
+            text_att=text_att
         )  # MFH:(N, 2*O) / MFB:(N, O)
         proj_feat = self.proj(z)                # (N, answer_size)
 

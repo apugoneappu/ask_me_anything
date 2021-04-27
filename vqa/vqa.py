@@ -70,7 +70,7 @@ class VQA():
         
         return net
     
-    def inference(self, question, image_feat):
+    def inference(self, question, image_feat, img_att, text_att):
         """Function used for running inverence given the image and question
 
         Args:
@@ -99,7 +99,7 @@ class VQA():
 
         image_feat_mask = make_mask(image_feat)
 
-        ret = self.net.forward(image_feat, image_feat_mask, ques_ix)
+        ret = self.net.forward(image_feat, image_feat_mask, ques_ix, img_att, text_att)
 
         return ret
 

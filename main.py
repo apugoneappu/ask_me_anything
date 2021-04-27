@@ -17,6 +17,8 @@ sb = SideBar()
 model_name = sb.model_name
 question = sb.question
 image_idx = sb.image_idx
+img_att = sb.img_att
+text_att = sb.text_att
 
 st.markdown("### Model Architecture")
 show_architecture(model_name)
@@ -39,7 +41,7 @@ if (image_idx is not None):
 if (question is not None and image is not None):
 
     # Get the dict from the net
-    ret = vqa_object.inference(question, image_feat)
+    ret = vqa_object.inference(question, image_feat, img_att, text_att)
 
     st.markdown('### Predicted confidence of top-7 answers')
     vqa_object.answer_confidence_plot(ret)
